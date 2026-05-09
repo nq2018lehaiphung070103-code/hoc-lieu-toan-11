@@ -83,7 +83,17 @@
             background: white; border-radius: 4px; cursor: pointer;
         }
         .angle-btn:hover { border-color: var(--primary); background: #f1f5f9; }
-
+/* Style cho vùng thông tin tác giả nằm dưới các nút bấm */
+.author-box {
+    margin-top: auto; 
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary);
+    font-size: 0.9em;
+    color: #475569;
+}
+.author-box strong { color: var(--primary); }
         /* SVG */
         #trig-svg { width: 100%; height: auto; }
         .axis { stroke: #94a3b8; stroke-width: 1.5; }
@@ -171,11 +181,10 @@
         </div>
     </div>
 </div>
-<!-- DÒNG THÔNG TIN TÁC GIẢ THÊM MỚI Ở ĐÂY -->
-    <div class="author-info">
-        Thiết kế bởi: <strong>Lê Hải Phụng </strong><br>
-        Đơn vị công tác: <strong>Trường THPT Phước Kiển</strong>
-    </div>
+<!-- Thông tin tác giả nằm ngay dưới các nút bấm góc đặc biệt -->
+<div class="author-box">
+    Tác giả: <strong>Lê Hải Phụng </strong><br>
+    Đơn vị: <strong>Lớp CH K22 -LL&PPDHBMT </strong>
 </div>
 <script>
     let angleDeg = 0;
