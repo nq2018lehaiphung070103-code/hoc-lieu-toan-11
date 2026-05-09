@@ -3,246 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học liệu số: Giá trị lượng giác trực quan</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Khám phá giá trị lượng giác trực quan</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --primary: #2563eb;
-            --secondary: #10b981;
-            --accent: #ef4444;
-            --bg: #f8fafc;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f8fafc;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
             display: flex;
             justify-content: center;
             padding: 20px;
+            margin: 0;
         }
 
-        .app-container {
+        .app-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 1000px;
             width: 100%;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        h1 { color: var(--primary); text-align: center; margin-bottom: 30px; }
-
-        .layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 25px;
         }
 
-        @media (max-width: 768px) {
-            .layout { grid-template-columns: 1fr; }
-        }
-
-        /* Vòng tròn lượng giác */
-        .circle-container {
-            position: relative;
-            background: #fff;
+        /* Vòng tròn & Giá trị */
+        .left-panel { display: flex; flex-direction: column; gap: 20px; }
+        
+        .circle-box {
             border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border-radius: 12px;
             padding: 10px;
+            position: relative;
+            background: white;
+            cursor: crosshair;
         }
 
-        #trig-circle {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Bảng điều khiển */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .slider-box {
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        input[type=range] { width: 100%; cursor: pointer; }
-
-        .values-display {
+        .results-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 12px;
         }
 
-        .val-card {
-            padding: 10px;
-            border-radius: 5px;
+        .res-item {
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
-            font-weight: bold;
-            color: white;
+            border-bottom: 4px solid #cbd5e1;
+            background: var(--bg-light);
         }
+        .res-item.cos { border-color: var(--primary); }
+        .res-item.sin { border-color: var(--danger); }
+        .res-item.tan { border-color: var(--success); }
+        .res-item.cot { border-color: var(--warning); }
+        .res-label { font-size: 0.85em; color: #64748b; margin-bottom: 4px; }
+        .res-val { font-size: 1.2em; font-weight: bold; }
 
-        .sin-card { background: var(--accent); }
-        .cos-card { background: var(--primary); }
-        .tan-card { background: #8b5cf6; }
-        .cot-card { background: #f59e0b; }
+        /* Bảng & Điều khiển */
+        .right-panel { display: flex; flex-direction: column; gap: 20px; }
 
-        .pedagogy-steps {
-            margin-top: 20px;
-            border-top: 2px dashed #cbd5e1;
-            padding-top: 20px;
+        h2 { font-size: 1.2rem; color: #1e293b; border-left: 4px solid var(--primary); padding-left: 10px; margin: 0; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--bg-light); border-radius: 8px; overflow: hidden; }
+        th, td { padding: 10px; text-align: center; border: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; font-weight: 600; }
+        .active-quad { background: #fef9c3 !important; font-weight: bold; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;
+            background: white; cursor: pointer; font-weight: 500; transition: all 0.2s;
         }
+        .btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .step-item {
-            margin-bottom: 15px;
-            padding-left: 15px;
-            border-left: 3px solid var(--secondary);
+        .special-angles {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px;
         }
+        .angle-btn {
+            padding: 6px 2px; font-size: 0.85em; border: 1px solid #e2e8f0;
+            background: white; border-radius: 4px; cursor: pointer;
+        }
+        .angle-btn:hover { background: #f1f5f9; border-color: var(--primary); }
+
+        /* SVG Styles */
+        #trig-svg { width: 100%; height: auto; }
+        .axis { stroke: #94a3b8; stroke-width: 1.5; }
+        .unit-circle { fill: none; stroke: #cbd5e1; stroke-width: 2; }
+        .radius-line { stroke: #1e293b; stroke-width: 3; stroke-linecap: round; }
+        .angle-arc { fill: rgba(37, 99, 235, 0.1); stroke: var(--primary); stroke-width: 1.5; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <h1>Giá Trị Lượng Giác Của Góc Lượng Giác - Hải Phụng code</h1>
+<div class="app-card">
+    <!-- CỘT TRÁI -->
+    <div class="left-panel">
+        <div class="circle-box" id="interaction-area">
+            <svg id="trig-svg" viewBox="0 0 400 400">
+                <!-- Hệ trục -->
+                <line x1="30" y1="200" x2="370" y2="200" class="axis" />
+                <line x1="200" y1="30" x2="200" y2="370" class="axis" />
+                <text x="375" y="205" font-size="12" fill="var(--primary)" font-weight="bold">cos</text>
+                <text x="205" y="25" font-size="12" fill="var(--danger)" font-weight="bold">sin</text>
+                <text x="185" y="195" font-size="14" font-weight="bold">O</text>
 
-    <div class="layout">
-        <!-- Bên trái: Vòng tròn trực quan -->
-        <div class="circle-container">
-            <svg id="trig-circle" width="400" height="400" viewBox="0 0 400 400">
-                <!-- Hệ trục tọa độ -->
-                <line x1="20" y1="200" x2="380" y2="200" stroke="#94a3b8" stroke-width="1" />
-                <line x1="200" y1="20" x2="200" y2="380" stroke="#94a3b8" stroke-width="1" />
-                <text x="385" y="205" font-size="12">x (cos)</text>
-                <text x="205" y="15" font-size="12">y (sin)</text>
+                <!-- 4 Góc phần tư -->
+                <text x="310" y="90" font-size="20" fill="#cbd5e1" font-style="italic">I</text>
+                <text x="80" y="90" font-size="20" fill="#cbd5e1" font-style="italic">II</text>
+                <text x="80" y="320" font-size="20" fill="#cbd5e1" font-style="italic">III</text>
+                <text x="310" y="320" font-size="20" fill="#cbd5e1" font-style="italic">IV</text>
 
-                <!-- Vòng tròn đơn vị -->
-                <circle cx="200" cy="200" r="150" fill="none" stroke="#cbd5e1" stroke-width="2" />
+                <!-- Vòng tròn -->
+                <circle cx="200" cy="200" r="150" class="unit-circle" />
 
-                <!-- Các điểm đặc biệt -->
-                <circle cx="350" cy="200" r="3" fill="black" /> <text x="355" y="215">1</text>
-                <circle cx="50" cy="200" r="3" fill="black" /> <text x="35" y="215">-1</text>
-                <circle cx="200" cy="50" r="3" fill="black" /> <text x="205" y="45">1</text>
-                <circle cx="200" cy="350" r="3" fill="black" /> <text x="205" y="365">-1</text>
+                <!-- Cung góc -->
+                <path id="angle-arc" class="angle-arc" d="" />
 
-                <!-- Bán kính di động -->
-                <line id="radius-line" x1="200" y1="200" x2="350" y2="200" stroke="black" stroke-width="3" />
-                
-                <!-- Hình chiếu sin/cos -->
-                <line id="cos-line" x1="200" y1="200" x2="350" y2="200" stroke="var(--primary)" stroke-width="4" />
-                <line id="sin-line" x1="350" y1="200" x2="350" y2="200" stroke="var(--accent)" stroke-width="4" stroke-dasharray="4" />
+                <!-- Hình chiếu nét đứt -->
+                <line id="line-cos" x1="200" y1="200" x2="200" y2="200" stroke="var(--primary)" stroke-dasharray="4" />
+                <line id="line-sin" x1="200" y1="200" x2="200" y2="200" stroke="var(--danger)" stroke-dasharray="4" />
 
-                <!-- Điểm M -->
-                <circle id="point-m" cx="350" cy="200" r="6" fill="var(--secondary)" />
-                <text id="label-m" x="360" y="190" font-weight="bold">M</text>
+                <!-- Kim quay -->
+                <line id="radius" x1="200" y1="200" x2="350" y2="200" class="radius-line" />
+                <circle id="point-m" cx="350" cy="200" r="7" fill="#1e293b" />
             </svg>
-            
-            <div class="values-display" style="width: 100%;">
-                <div class="val-card sin-card">sin(α) = <span id="sin-val">0.00</span></div>
-                <div class="val-card cos-card">cos(α) = <span id="cos-val">1.00</span></div>
-                <div class="val-card tan-card">tan(α) = <span id="tan-val">0.00</span></div>
-                <div class="val-card cot-card">cot(α) = <span id="cot-val">∞</span></div>
+        </div>
+
+        <div class="results-grid">
+            <div class="res-item cos"><div class="res-label">cos α</div><div class="res-val" id="out-cos">1.000</div></div>
+            <div class="res-item sin"><div class="res-label">sin α</div><div class="res-val" id="out-sin">0.000</div></div>
+            <div class="res-item tan"><div class="res-label">tan α</div><div class="res-val" id="out-tan">0.000</div></div>
+            <div class="res-item cot"><div class="res-label">cot α</div><div class="res-val" id="out-cot">∞</div></div>
+        </div>
+    </div>
+
+    <!-- CỘT PHẢI -->
+    <div class="right-panel">
+        <h2>KHÁM PHÁ DẤU CỦA GIÁ TRỊ LƯỢNG GIÁC</h2>
+        
+        <table>
+            <thead><tr><th>Góc</th><th>sin</th><th>cos</th><th>tan</th><th>cot</th></tr></thead>
+            <tbody>
+                <tr id="q1"><td>I</td><td>+</td><td>+</td><td>+</td><td>+</td></tr>
+                <tr id="q2"><td>II</td><td>+</td><td>-</td><td>-</td><td>-</td></tr>
+                <tr id="q3"><td>III</td><td>-</td><td>-</td><td>+</td><td>+</td></tr>
+                <tr id="q4"><td>IV</td><td>-</td><td>+</td><td>-</td><td>-</td></tr>
+            </tbody>
+        </table>
+
+        <div>
+            <p style="font-size: 0.9em; margin-bottom: 8px;">Đơn vị:</p>
+            <div class="btn-group">
+                <button class="btn active" onclick="setUnit('deg')">Độ (°)</button>
+                <button class="btn" onclick="setUnit('rad')">Radian (π)</button>
             </div>
         </div>
 
-        <!-- Bên phải: Điều khiển và Sư phạm -->
-        <div class="controls">
-            <div class="slider-box">
-                <label><b>Góc lượng giác α: <span id="angle-val">0</span>°</b></label>
-                <input type="range" id="angle-slider" min="-360" max="360" value="0" step="1">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 5px;">
-                    <span>-360° (Chiều âm)</span>
-                    <span>360° (Chiều dương)</span>
-                </div>
+        <div>
+            <p style="font-size: 0.9em; margin-bottom: 8px;">Hướng đo & Góc đặc biệt:</p>
+            <div class="btn-group" style="margin-bottom: 10px;">
+                <button class="btn active" onclick="setDir(1)">Chiều dương (+)</button>
+                <button class="btn" onclick="setDir(-1)">Chiều âm (-)</button>
             </div>
-
-            <div class="pedagogy-steps">
-                <h3>Các bước xác định GTLG:</h3>
-                <div class="step-item">
-                    <strong>Bước 1:</strong> Xác định điểm \( M \) trên đường tròn đơn vị sao cho \( (Ox, OM) = \alpha \).
-                </div>
-                <div class="step-item">
-                    <strong>Bước 2:</strong> Hoành độ của \( M \) là \( \cos \alpha \), tung độ của \( M \) là \( \sin \alpha \).
-                </div>
-                <div class="step-item">
-                    <strong>Bước 3:</strong> Tính \( \tan \alpha = \frac{\sin \alpha}{\cos \alpha} \) và \( \cot \alpha = \frac{\cos \alpha}{\sin \alpha} \).
-                </div>
-            </div>
-            
-            <div style="background: #fffbeb; padding: 10px; border-radius: 5px; border: 1px solid #f59e0b; font-size: 0.9em;">
-                💡 <b>Lưu ý:</b> Khi di chuyển thanh trượt sang trái (giá trị âm), bán kính quay cùng chiều kim đồng hồ.
+            <div class="special-angles" id="angle-buttons">
+                <!-- JS tự tạo nút -->
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const slider = document.getElementById('angle-slider');
-    const angleText = document.getElementById('angle-val');
-    const radiusLine = document.getElementById('radius-line');
-    const cosLine = document.getElementById('cos-line');
-    const sinLine = document.getElementById('sin-line');
-    const pointM = document.getElementById('point-m');
-    const labelM = document.getElementById('label-m');
+    let currentAngle = 0; // độ
+    let unit = 'deg';
+    let direction = 1;
+    const R = 150;
+    const Center = 200;
 
-    const sinVal = document.getElementById('sin-val');
-    const cosVal = document.getElementById('cos-val');
-    const tanVal = document.getElementById('tan-val');
-    const cotVal = document.getElementById('cot-val');
+    const angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+    const radLabels = ["0", "π/6", "π/4", "π/3", "π/2", "2π/3", "3π/4", "5π/6", "π", "7π/6", "5π/4", "4π/3", "3π/2", "5π/3", "7π/4", "11π/6", "2π"];
 
-    function update() {
-        let deg = parseInt(slider.value);
-        let rad = deg * Math.PI / 180;
-        
-        angleText.innerText = deg;
-
-        // Tọa độ trên SVG (Center 200,200 - R 150)
-        let x = 200 + 150 * Math.cos(rad);
-        let y = 200 - 150 * Math.sin(rad); // Trục y trong SVG hướng xuống nên phải trừ
-
-        // Cập nhật hình vẽ
-        radiusLine.setAttribute('x2', x);
-        radiusLine.setAttribute('y2', y);
-        pointM.setAttribute('cx', x);
-        pointM.setAttribute('cy', y);
-        labelM.setAttribute('x', x + 10);
-        labelM.setAttribute('y', y - 10);
-
-        cosLine.setAttribute('x2', x);
-        sinLine.setAttribute('x1', x);
-        sinLine.setAttribute('y1', y);
-        sinLine.setAttribute('x2', x);
-        sinLine.setAttribute('y2', 200);
-
-        // Tính toán giá trị
-        let s = Math.sin(rad);
-        let c = Math.cos(rad);
-        
-        sinVal.innerText = s.toFixed(2);
-        cosVal.innerText = c.toFixed(2);
-        
-        if (Math.abs(c) < 0.001) {
-            tanVal.innerText = "KĐĐ";
-        } else {
-            tanVal.innerText = (s/c).toFixed(2);
-        }
-
-        if (Math.abs(s) < 0.001) {
-            cotVal.innerText = "KĐĐ";
-        } else {
-            cotVal.innerText = (c/s).toFixed(2);
-        }
+    function initButtons() {
+        const container = document.getElementById('angle-buttons');
+        angles.forEach((a, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'angle-btn';
+            btn.innerText = unit === 'deg' ? a + '°' : radLabels[i];
+            btn.onclick = () => { currentAngle = a * direction; update(); };
+            container.appendChild(btn);
+        });
     }
 
-    slider.addEventListener('input', update);
+    function setUnit(u) {
+        unit = u;
+        document.querySelectorAll('.btn-group')[0].querySelectorAll('.btn').forEach((b, i) => {
+            b.classList.toggle('active', (i === 0 && u === 'deg') || (i === 1 && u === 'rad'));
+        });
+        document.getElementById('angle-buttons').innerHTML = '';
+        initButtons();
+    }
+
+    function setDir(d) {
+        direction = d;
+        document.querySelectorAll('.btn-group')[1].querySelectorAll('.btn').forEach((b, i) => {
+            b.classList.toggle('active', (i === 0 && d === 1) || (i === 1 && d === -1));
+        });
+    }
+
+    function update() {
+        let rad = currentAngle * Math.PI / 180;
+        let x = Center + R * Math.cos(rad);
+        let y = Center - R * Math.sin(rad);
+
+        // Cập nhật SVG
+        document.getElementById('radius').setAttribute('x2', x);
+        document.getElementById('radius').setAttribute('y2', y);
+        document.getElementById('point-m').setAttribute('cx', x);
+        document.getElementById('point-m').setAttribute('cy', y);
+        
+        document.getElementById('line-cos').setAttribute('x2', x);
+        document.getElementById('line-sin').setAttribute('x1', x);
+        document.getElementById('line-sin').setAttribute('y1', y);
+        document.getElementById('line-sin').setAttribute('x2', x);
+        document.getElementById('line-sin').setAttribute('y2', 200);
+
+        // Vẽ cung góc
+        let largeArc = Math.abs(currentAngle) > 180 ? 1 : 0;
+        let sweep = currentAngle >= 0 ? 0 : 1;
+        let d = `M 350 200 A 150 150 0 ${largeArc} ${sweep} ${x} ${y} L 200 200 Z`;
+        document.getElementById('angle-arc').setAttribute('d', currentAngle === 0 ? "" : d);
+
+        // Giá trị số
+        let s = Math.sin(rad);
+        let c = Math.cos(rad);
+        document.getElementById('out-sin').innerText = s.toFixed(3);
+        document.getElementById('out-cos').innerText = c.toFixed(3);
+        document.getElementById('out-tan').innerText = Math.abs(c) < 0.001 ? "KĐĐ" : (s/c).toFixed(3);
+        document.getElementById('out-cot').innerText = Math.abs(s) < 0.001 ? "KĐĐ" : (c/s).toFixed(3);
+
+        // Highlight bảng
+        document.querySelectorAll('tr').forEach(tr => tr.classList.remove('active-quad'));
+        let normAngle = ((currentAngle % 360) + 360) % 360;
+        if (normAngle > 0 && normAngle < 90) document.getElementById('q1').classList.add('active-quad');
+        else if (normAngle > 90 && normAngle < 180) document.getElementById('q2').classList.add('active-quad');
+        else if (normAngle > 180 && normAngle < 270) document.getElementById('q3').classList.add('active-quad');
+        else if (normAngle > 270 && normAngle < 360) document.getElementById('q4').classList.add('active-quad');
+    }
+
+    // Tương tác chuột quay kim
+    const area = document.getElementById('interaction-area');
+    area.addEventListener('mousemove', (e) => {
+        if (e.buttons !== 1) return;
+        const rect = area.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        let angle = Math.atan2(centerY - e.clientY, e.clientX - centerX) * 180 / Math.PI;
+        currentAngle = Math.round(angle);
+        update();
+    });
+
+    initButtons();
     update();
 </script>
 
